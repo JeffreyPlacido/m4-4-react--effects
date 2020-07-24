@@ -9,12 +9,13 @@ width: 200px;
 `
 const Item = (props) => {
     const getQuant= props.name.toLowerCase()
+    const getQuants = props.purchasedItems[0][getQuant];
     return (
-        <PurchaseButton onClick={() => props.handleClick()}>
+        <PurchaseButton onClick={() =>  props.handleClick(props.name, props.value, props.cost)}>
     <p>{props.name}</p>
     <p>{props.value}</p>
     <p>{props.cost}</p>
-    <p>{props.purchasedItems[getQuant]}</p>
+    <p>{getQuants}</p>
         </PurchaseButton>
     )
 }
