@@ -13,12 +13,18 @@ const items = [
 ];
 
 const Game = () => {
-  const [numCookies, setCookies] = React.useState(10000);
+  const [numCookies, setCookies] = React.useState(500);
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
+
+  const handleKeyPress = (key) => {
+    if (key.code === "Space") {
+      setCookies(numCookies + 1);
+    }
+  };
 
   useInterval(() => {
     const calculateCookiesPerTick = () => {
@@ -34,7 +40,6 @@ const Game = () => {
   }, 1000);
 
   const handleClick = (name, value, cost) => {
-    console.log(name, value, cost);
     const updatedItems = purchasedItems;
     updatedItems[name.toLowerCase()] += 1;
     setPurchasedItems(updatedItems);
@@ -46,13 +51,21 @@ const Game = () => {
   };
 
   React.useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+    document.title = `${numCookies} cookies`;
 
     return () => {
-      document.title = `Alati Caserta`;
+      document.title = `Cookies`;
     };
   }, [numCookies]);
   console.log(numCookies);
+
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  });
 
   return (
     <Wrapper>
