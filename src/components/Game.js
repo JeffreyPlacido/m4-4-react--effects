@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 import cookieSrc from "../cookie.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useInterval from "../hooks/use-interval.hook";
 
 const items = [
@@ -44,6 +44,15 @@ const Game = () => {
       setCookies(numCookies - cost);
     }
   };
+
+  React.useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+
+    return () => {
+      document.title = `Alati Caserta`;
+    };
+  }, [numCookies]);
+  console.log(numCookies);
 
   return (
     <Wrapper>
