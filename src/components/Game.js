@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Item from "./Item";
 import cookieSrc from "../cookie.svg";
 import { useState } from "react";
+import useInterval from "../hooks/use-interval.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -12,12 +13,25 @@ const items = [
 ];
 
 const Game = () => {
-  const [numCookies, setCookies] = React.useState(100);
+  const [numCookies, setCookies] = React.useState(10000);
   const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
+
+  useInterval(() => {
+    const calculateCookiesPerTick = () => {
+      let click = purchasedItems.cursor;
+      let avo = purchasedItems.grandma;
+      let farm = purchasedItems.farm;
+      return click + avo * 10 + farm * 80;
+    };
+
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+
+    setCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
 
   const handleClick = (name, value, cost) => {
     console.log(name, value, cost);
@@ -36,8 +50,12 @@ const Game = () => {
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>
+            {purchasedItems.cursor +
+              purchasedItems.grandma * 10 +
+              purchasedItems.farm * 80}
+          </strong>{" "}
+          cookies per second
         </Indicator>
         <Button onClick={() => setCookies(numCookies + 1)}>
           <Cookie src={cookieSrc} />
@@ -55,6 +73,7 @@ const Game = () => {
               value={item.value}
               purchasedItems={[purchasedItems, setPurchasedItems]}
               handleClick={handleClick}
+              useInterval
             />
           );
         })}
